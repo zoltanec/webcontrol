@@ -9,7 +9,12 @@ import Text.Printf
 --main :: IO ()
 -- Правильно ли написал задачу?
 -- Запустить процесс, считать его PID. При вводе exit завершать процесс
-main = loop
+main = do
+    print "hello"
+    forkIO $ runWebSrv
+    --readLine
+
+readLine = loop
     where
          loop = do
            s <- getLine
@@ -18,9 +23,11 @@ main = loop
               then return ()
               else do forkIO $ checkUserInput s
                       loop
+runWebSrv :: IO ()
+runWebSrv = atomicPutStrLn "run web srv on 0.0.0.0:16000"
 
 checkUserInput :: String -> IO ()
-checkUserInput s  = do
+checkUserInput s = do
   let t = read s :: Int
   printf "user typed: %d\n" t
   --threadDelay (10^6 * t)
